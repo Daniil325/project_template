@@ -1,4 +1,5 @@
-from typing import Any, Generic, TypeVar, Protocol
+from abc import ABC, abstractmethod
+from typing import Any, BinaryIO, Generic, TypeVar, Protocol
 
 from sqlalchemy import UUID
 
@@ -20,4 +21,19 @@ class AbstractSQLRepository(Generic[T], Protocol):
         ...
         
     async def delete(self, id: UUID) -> None:
+        ...
+        
+        
+class ImageStorage(ABC):
+
+    @abstractmethod
+    async def exists(self, image_id: str) -> bool:
+        ...
+
+    @abstractmethod
+    async def upload(self, filename: str, file: BinaryIO, size: int | None = None) -> str:
+        ...
+
+    @abstractmethod
+    async def download(self, image_id: str) -> bytes:
         ...
